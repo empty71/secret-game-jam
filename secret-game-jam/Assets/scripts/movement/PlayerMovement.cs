@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class playermovement : MonoBehaviour
 {
     [Header("Movement")]
     private float movespeed;
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float crouchSpeed;
     public float crouchYScale;
     private float startYScale;
-    
+
 
     [Header("keybinds")]
     public KeyCode jumpkey = KeyCode.Space;
@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     public MovementState state;
-    public enum MovementState 
+    public enum MovementState
     {
         walking,
         sprinting,
@@ -101,8 +101,8 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        
-        if(Input.GetKeyDown(jumpkey) && readyToJump && grounded)
+
+        if (Input.GetKeyDown(jumpkey) && readyToJump && grounded)
         {
             Debug.Log("jump");
             readyToJump = true;
@@ -119,17 +119,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyUp(crouchKey))
         {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale , transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
     }
 
     private void StateHandler()
     {
-       if (sliding)
-       {
-           state = MovementState.sliding;
+        if (sliding)
+        {
+            state = MovementState.sliding;
 
-            if (OnSlope()&& rb.velocity.y < 0.1f)
+            if (OnSlope() && rb.velocity.y < 0.1f)
             {
                 desiredMoveSpeed = slideSpeed;
             }
@@ -138,29 +138,29 @@ public class PlayerMovement : MonoBehaviour
                 desiredMoveSpeed = sprintspeed;
             }
 
-       }
-       else if (Input.GetKey(crouchKey))
-       {
+        }
+        else if (Input.GetKey(crouchKey))
+        {
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
-       }
+        }
 
-       else if(grounded && Input.GetKey(sprintKey))
-       {
+        else if (grounded && Input.GetKey(sprintKey))
+        {
             state = MovementState.sprinting;
             desiredMoveSpeed = sprintspeed;
-       }
-       else if (grounded)
-       {
-           state = MovementState.walking;
-           desiredMoveSpeed = walkspeed;
-       }
-       else
-       {
-           state = MovementState.air;
-       }
+        }
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            desiredMoveSpeed = walkspeed;
+        }
+        else
+        {
+            state = MovementState.air;
+        }
         // check if desiredmovespeed has changed drastically
-        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 4f && movespeed!= 0)
+        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 4f && movespeed != 0)
         {
             StopAllCoroutines();
             StartCoroutine(SmoothlyLerpMoveSpeed());
@@ -181,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
         float diffrence = Mathf.Abs(desiredMoveSpeed - movespeed);
         float startValue = movespeed;
 
-        while(time< diffrence)
+        while (time < diffrence)
         {
             movespeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / diffrence);
             time += Time.deltaTime;
@@ -206,8 +206,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded)
         {
-        rb.AddForce(moveDirection.normalized * movespeed * 10f, ForceMode.Force);
-        }else if (!grounded)
+            rb.AddForce(moveDirection.normalized * movespeed * 10f, ForceMode.Force);
+        }
+        else if (!grounded)
         {
             rb.AddForce(moveDirection.normalized * movespeed * 10f * airMultiplier, ForceMode.Force);
         }
@@ -218,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (OnSlope() && !exitingSlope)
         {
-            if(rb.velocity.magnitude > movespeed)
+            if (rb.velocity.magnitude > movespeed)
             {
                 rb.velocity = rb.velocity.normalized * movespeed;
             }
@@ -227,11 +228,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 flatvel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-             if(flatvel.magnitude > movespeed)
-             {
-               Vector3 limitedvel = flatvel.normalized * movespeed;
-               rb.velocity = new Vector3(limitedvel.x, rb.velocity.y, limitedvel.z);
-             }
+            if (flatvel.magnitude > movespeed)
+            {
+                Vector3 limitedvel = flatvel.normalized * movespeed;
+                rb.velocity = new Vector3(limitedvel.x, rb.velocity.y, limitedvel.z);
+            }
         }
 
     }
@@ -254,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool OnSlope()
     {
-        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;

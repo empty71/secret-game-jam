@@ -8,7 +8,7 @@ public class Sliding : MonoBehaviour
     public Transform orientation;
     public Transform playerObj;
     private Rigidbody rb;
-    private PlayerMovement pm;
+    private playermovement pm;
 
     [Header("Sliding")]
     public float maxSlideTime;
@@ -25,12 +25,12 @@ public class Sliding : MonoBehaviour
 
     public bool sliding;
 
-    public PlayerMovement playerMovement;
+    public playermovement playerMovement;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        pm = GetComponent<PlayerMovement>();
+        pm = GetComponent<playermovement>();
         startYscale = playerObj.localScale.y;
     }
     void Update()
@@ -94,6 +94,4 @@ public class Sliding : MonoBehaviour
 
         playerObj.localScale = new Vector3(playerObj.localScale.x, startYscale, playerObj.localScale.z);
     }
-
-    // Update is called once per frame
 }
