@@ -30,8 +30,8 @@ public class playermovement : MonoBehaviour
 
     [Header("keybinds")]
     public KeyCode jumpkey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.Z;
+    public KeyCode sprintKey = KeyCode.LeftShift;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -43,10 +43,10 @@ public class playermovement : MonoBehaviour
     private RaycastHit slopeHit;
     private bool exitingSlope;
 
-
+    [Header("others")]
     public Transform orientation;
-
-
+    public bool sliding;
+    Rigidbody rb;
     float horizontalInput;
     float verticalInput;
 
@@ -62,10 +62,10 @@ public class playermovement : MonoBehaviour
         air
     }
 
-    public bool sliding;
+   
 
 
-    Rigidbody rb;
+   
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -85,10 +85,12 @@ public class playermovement : MonoBehaviour
         if (grounded)
         {
             rb.drag = groundDrag;
+           
         }
         else
         {
             rb.drag = 0;
+           
         }
     }
 
@@ -207,10 +209,12 @@ public class playermovement : MonoBehaviour
         if (grounded)
         {
             rb.AddForce(moveDirection.normalized * movespeed * 10f, ForceMode.Force);
+            rb.mass = 1.2f;
         }
         else if (!grounded)
         {
             rb.AddForce(moveDirection.normalized * movespeed * 10f * airMultiplier, ForceMode.Force);
+            rb.mass = rb.mass * 1.5f;
         }
 
     }
